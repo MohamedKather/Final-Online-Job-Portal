@@ -1,1 +1,2 @@
-# Final-Online-Job-Portal
+# OnlineJobPortal
+Springboot with h2 database
