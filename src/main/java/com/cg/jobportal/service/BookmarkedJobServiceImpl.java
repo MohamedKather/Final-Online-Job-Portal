@@ -4,38 +4,38 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import com.cg.jobportal.entity.BookmarkedJob;
+import com.cg.jobportal.exceptions.BookmarkedJobAlreadyExistException;
 import com.cg.jobportal.repository.BookmarkedJobRepository;
 
 @Service
 public class BookmarkedJobServiceImpl implements BookmarkedJobService{
 	
 	@Autowired
-	private BookmarkedJobRepository bookRepo;
+	private BookmarkedJobRepository bookmarkedjobService;
 	
 	@Override
-	public BookmarkedJob saveJob(BookmarkedJob book) {
-	BookmarkedJob BookmarkedJob=bookRepo.save(book);
-	return BookmarkedJob;
+	public BookmarkedJob saveJob(BookmarkedJob bookmarkedjob) throws BookmarkedJobAlreadyExistException {
+		if(bookmarkedjobService.existsById(bookmarkedjob.getId()))
+			throw new BookmarkedJobAlreadyExistException();
+	return bookmarkedjobService.save(bookmarkedjob);
 	}
 
 	@Override
 	public List<BookmarkedJob> getAllBookmarkedJobs() {
-		List<BookmarkedJob> BookmarkedJobs=bookRepo.findAll();
-		return BookmarkedJobs;
+		return bookmarkedjobService.findAll();
 	}
 	
 	@Override
-	public String deleteById(Long id) {
-		bookRepo.deleteById(id);
+	public String deleteById(long id) {
+		bookmarkedjobService.deleteById(id);
 		return "Bookmark deleted successfully";
 	}
 
 	@Override
-	public BookmarkedJob getById(Long id) {
-		 BookmarkedJob git = bookRepo.findById(id).get();
-		 return git;
+	public BookmarkedJob getById(long id) {
+		return bookmarkedjobService.findById(id).get();
+		 
 	}
-
 }

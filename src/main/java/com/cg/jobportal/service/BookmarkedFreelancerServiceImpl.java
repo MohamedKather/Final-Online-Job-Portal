@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.cg.jobportal.entity.BookmarkedFreelancer;
 import com.cg.jobportal.exceptions.BookmarkedFreelancerAlreadyExistsException;
-import com.cg.jobportal.exceptions.NoBookmarkedFreelancerExistsException;
+import com.cg.jobportal.exceptions.InvalidBookmarkedFreelancerException;
 import com.cg.jobportal.repository.BookmarkedFreelancerRepository;
 
 
@@ -17,35 +17,34 @@ import com.cg.jobportal.repository.BookmarkedFreelancerRepository;
 public class BookmarkedFreelancerServiceImpl implements BookmarkedFreelancerService {
 
 	@Autowired
-	private BookmarkedFreelancerRepository bookRepo;
+	private BookmarkedFreelancerRepository bookmarkedFreelancerRepository;
 	
 	@Override
 	public  BookmarkedFreelancer saveBookmarkedFreelancer(BookmarkedFreelancer bmark) throws BookmarkedFreelancerAlreadyExistsException{
-		if(bookRepo.existsById(bmark.getId()))
+		if(bookmarkedFreelancerRepository.existsById(bmark.getId()))
 			throw new BookmarkedFreelancerAlreadyExistsException();
 		
-		BookmarkedFreelancer savedBookmarkedFreelancer= bookRepo.save(bmark);
-		return savedBookmarkedFreelancer;
+		return bookmarkedFreelancerRepository.save(bmark);
 	}
 	
 	@Override
 	public List<BookmarkedFreelancer> getAllBookmarkedFreelancer(){
-		List<BookmarkedFreelancer>  bmarkfreelancer=bookRepo.findAll();
-		return  bmarkfreelancer;
+		return bookmarkedFreelancerRepository.findAll();
 	}
 	
 	@Override
-	public Optional<BookmarkedFreelancer> getBookmarkedFreelancerById(long id) throws NoBookmarkedFreelancerExistsException{
-		if(bookRepo.existsById(id)==false)
-			throw new NoBookmarkedFreelancerExistsException();
-		Optional<BookmarkedFreelancer> book=bookRepo.findById(id);
-		return book;
+	public BookmarkedFreelancer getBookmarkedFreelancerById(long id) throws InvalidBookmarkedFreelancerException{
+		if(bookmarkedFreelancerRepository.existsById(id)) {
+			return bookmarkedFreelancerRepository.findById(id).get();
+		}
+		else
+			throw new InvalidBookmarkedFreelancerException();
 	}
 	@Override
 	public String deleteBookmarkedFreelancerById(long id) {
-		Optional<BookmarkedFreelancer> free=bookRepo.findById(id);
+		Optional<BookmarkedFreelancer> free=bookmarkedFreelancerRepository.findById(id);
 		if(free.isPresent()) {
-			bookRepo.deleteById(id);
+			bookmarkedFreelancerRepository.deleteById(id);
 			return "deleted successfully";
 		}
 		return "id doesn't exist";

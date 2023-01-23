@@ -1,20 +1,25 @@
 package com.cg.jobportal.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.cg.jobportal.entity.Recruiter;
+import com.cg.jobportal.exceptions.InvalidRecruiterException;
+import com.cg.jobportal.exceptions.RecruiterAlreadyExistException;
+
+import jakarta.validation.Valid;
 
 public interface RecruiterService {
 	
-	Recruiter saveRecruiter(Recruiter rec);
+	Recruiter saveRecruiter(@Valid Recruiter recruiter) throws RecruiterAlreadyExistException;
 	
-	List<Recruiter> getAllRecruiters();
+	List<Recruiter> getAllRecruiter();
+
+	Recruiter getRecruiterById(long id) throws InvalidRecruiterException;
 	
-	Optional<Recruiter>getRecruiterById(Long Id);
+	String deleteById(long id);
 	
-	String deleteById(Long id);
-	
-	Recruiter updateRecruiter(Recruiter rec);
+	Recruiter updateRecruiter(long id,Recruiter recruiter) throws InvalidRecruiterException;
+
+	String loginRecruiter(Recruiter recruiter);
 
 }

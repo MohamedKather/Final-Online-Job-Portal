@@ -10,12 +10,13 @@ import com.cg.jobportal.entity.Admin;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
-	public List<Admin> getByEmail(@Param("email") String email);
+	
+	List<Admin> getByEmail(@Param("email") String email);
 
-	public List<Admin> getByPassword(@Param("password") String password);
+	 List<Admin> getByPassword(@Param("password") String password);
 
-	public Admin findByUserName(String userName);
+	 Admin findByUserName(String userName);
 
-	public boolean existsByUserName(String userName);
+	 boolean existsByUserName(String userName);
 
 }

@@ -1,6 +1,9 @@
 package com.cg.jobportal.entity;
 
+
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,37 +11,36 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+/**************************************************************************************
+ * @author       Vedavyas 
+ * Description : This is the Entity class for Bookmarked Job module. 
+ * Created Date: 23 January, 2023 
+ * 
+ *************************************************************************************/
 
 @Entity
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class BookmarkedJob {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "bookmarked_id")
 	private Long id;
 
-	@OneToOne(targetEntity = Skill.class, cascade =CascadeType.ALL)
-	@JoinColumn(name = "skill_id")
-	private Skill skill;
 
-	@ManyToOne(targetEntity = Job.class, cascade =CascadeType.ALL)
-	@JoinColumn(name = "job_id")
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="fk_freelancer_id")
+	private Freelancer freelancer;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "fk_jobs_id")
 	private Job job;
 
-	@OneToOne(targetEntity = Freelancer.class, cascade =CascadeType.ALL)
-	@JoinColumn(name = "freelancer_id")
-	private Freelancer freelancer;
-
-	public BookmarkedJob(Skill skill, Job job, Freelancer freelancer) {
-		super();
-		this.skill = skill;
-		this.job = job;
-		this.freelancer = freelancer;
-	}
 	
 	
 	

@@ -1,23 +1,23 @@
 package com.cg.jobportal.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.stereotype.Service;
 import com.cg.jobportal.entity.Skill;
 import com.cg.jobportal.exceptions.InvalidSkillException;
+import com.cg.jobportal.exceptions.SkillAlreadyExistsException;
 
-@Service
+import jakarta.validation.Valid;
+
 public interface SkillService {
 
-	Skill saveSkill(Skill skl) throws InvalidSkillException;
+	Skill saveSkill(@Valid Skill skill) throws SkillAlreadyExistsException;
 
-	List<Skill> getAllSkills();
+	List<Skill> getAllSkills() ;
 	
-	Optional<Skill> getSkillById(long id);
+	Skill updateSkill(long skillId,Skill skill) throws InvalidSkillException;
 
-	String deleteSkill(long id);
+	Skill getById(long skillId) throws InvalidSkillException;
 
-	Skill updateSkill(Skill skill);
+	String deleteSkill(long skillId);
 
 }

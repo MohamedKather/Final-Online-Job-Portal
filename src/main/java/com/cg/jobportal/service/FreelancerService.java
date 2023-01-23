@@ -1,24 +1,26 @@
 package com.cg.jobportal.service;
+
 import java.util.List;
-import java.util.Optional;
+
 
 import com.cg.jobportal.entity.Freelancer;
-
-import jakarta.validation.Valid;
+import com.cg.jobportal.exceptions.FreelancerAlreadyExistException;
+import com.cg.jobportal.exceptions.InvalidFreelancerException;
 
 public interface FreelancerService {
 
-	Freelancer saveFreelancer(Freelancer free);
+	Freelancer saveFreelancer(Freelancer freelancer) throws FreelancerAlreadyExistException;
 
 	List<Freelancer> getAllFreelancer();
 
-	Optional<Freelancer> getFreelancerById(long id);
+	Freelancer getFreelancerById(long id) throws InvalidFreelancerException;
 
 	String deleteFreelancer(long id);
 
-	Freelancer updateFreelancer(Freelancer free);
+	Freelancer updateFreelancer(Freelancer freelancer) throws InvalidFreelancerException;
 
-	List<Freelancer> FreelancerByUserName(String userName);
+	Freelancer freelancerByUserName(String userName);
 
-	
+	String loginFreelancer(Freelancer freelancer);
+
 }

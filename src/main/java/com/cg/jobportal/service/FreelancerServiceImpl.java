@@ -7,52 +7,69 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cg.jobportal.entity.Freelancer;
+import com.cg.jobportal.exceptions.FreelancerAlreadyExistException;
+import com.cg.jobportal.exceptions.InvalidFreelancerException;
 import com.cg.jobportal.repository.FreelancerRepository;
 
 @Service
 public class FreelancerServiceImpl implements FreelancerService {
-    
+
 	@Autowired
-	FreelancerRepository frepo;
+	private FreelancerRepository freelancerRepository;
 
 	@Override
-	public Freelancer saveFreelancer(Freelancer free) {
-		Freelancer saved = frepo.save(free);
-		return saved;
+	public Freelancer saveFreelancer(Freelancer freelancer) throws FreelancerAlreadyExistException {
+		if (freelancerRepository.existsById(freelancer.getId())) {
+			throw new FreelancerAlreadyExistException();
+		}
+		return freelancerRepository.save(freelancer);
 	}
 
 	@Override
 	public List<Freelancer> getAllFreelancer() {
-		List<Freelancer> list = frepo.findAll();
-		return list;
+		return freelancerRepository.findAll();
 	}
 
 	@Override
-	public Optional<Freelancer> getFreelancerById(long id) {
-		Optional<Freelancer> getId = frepo.findById(id);
-		return getId;
+
+	public Freelancer getFreelancerById(long id) throws InvalidFreelancerException {
+		if (freelancerRepository.existsById(id)) {
+			return freelancerRepository.findById(id).get();
+		} else {
+			throw new InvalidFreelancerException();
+		}
 	}
 
 	@Override
 	public String deleteFreelancer(long id) {
-		Optional<Freelancer> getId = frepo.findById(id);
-		if(getId.isPresent()) {
-			frepo.deleteById(id);
+		Optional<Freelancer> getId = freelancerRepository.findById(id);
+		if (getId.isPresent()) {
+			freelancerRepository.deleteById(id);
 		}
 		return "Freelancer Doesn't Exists";
 	}
 
 	@Override
-	public Freelancer updateFreelancer(Freelancer free) {
-		Freelancer update = frepo.save(free);
-		return update;
+	public Freelancer updateFreelancer(Freelancer freelancer) throws InvalidFreelancerException {
+		if (freelancerRepository.existsById(freelancer.getId())) {
+			return freelancerRepository.save(freelancer);
+		} else {
+			throw new InvalidFreelancerException();
+		}
 	}
 
 	@Override
-	public List<Freelancer> FreelancerByUserName(String userName) {
-		List<Freelancer> getName = frepo.findByUserName(userName);
-		return getName;
+	public Freelancer freelancerByUserName(String userName) {
+		return freelancerRepository.findByUserName(userName);
 	}
-	
-	
+
+	@Override
+	public String loginFreelancer(Freelancer freelancer) {
+		Optional<Freelancer> login = freelancerRepository.findById(freelancer.getId());
+		if ((login.isPresent()) && (login.get().getPassword().equals(freelancer.getPassword()))) {
+			return "Login Successfull";
+		}
+		return "Invalid email or password";
+
+	}
 }

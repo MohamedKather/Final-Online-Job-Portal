@@ -1,8 +1,5 @@
 package com.cg.jobportal.entity;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,13 +8,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+/************************************************************
+ * @author sahana
+ * Created Date: 23 January, 2023 
+ * Description : This is the Entity class for Job module. 
+ ************************************************************/
 
 @Entity
 @Data
@@ -36,18 +35,9 @@ public class Job {
 	@Column(nullable = false)
 	private Boolean active;
 	
-	@OneToOne(targetEntity = Skill.class, cascade = CascadeType.ALL)
-	private Skill skill;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="fk_recruiter_id")
+	private Recruiter recruiter;
 
-	@ManyToOne(targetEntity = Recruiter.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "recruiter_id")
-	private Recruiter postedBy;
-
-	private LocalDate postedDate = LocalDate.now(ZoneId.of("GMT+05:30"));
-
-	@OneToOne(targetEntity = Freelancer.class, cascade =CascadeType.ALL)
-	private Freelancer awardedTo;
-
-	@OneToMany(mappedBy = "job", targetEntity = JobApplication.class, cascade =CascadeType.ALL)
-	private List<JobApplication> jobApplications;
 }
